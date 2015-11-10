@@ -8,9 +8,20 @@ jdk:
 - oraclejdk8
 script: sbt ++$TRAVIS_SCALA_VERSION clean coverage test scalastyle && sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-bintraykey:
-  secure: fqzmFFy1WuXUp2aHMbU/a3oo9JfVYBcdJtGFxVtfj+Q3UVWjVpCwxa4Asqdd69UASTSxiil8ywR0DMz99v1OykCoXfPdMh8a46ymJmbR2iZCbjqKSgxdEdVlQa8kWvdIssitdUEwloFa081RQaQRKLqBvb7/mzGWPO4qpoz+ALo=
+  - >
+   bash <(curl -s https://codecov.io/bash) &&
+   test "${TRAVIS_PULL_REQUEST}" = 'false' &&
+   test "${TRAVIS_JDK_VERSION}" = 'oraclejdk8' &&
+   test "${TRAVIS_TAG}" != '' && echo "TRAVIS TAG: ${TRAVIS_TAG}" &&
+   sh "$TRAVIS_BUILD_DIR/.travis-ci-bintray-credentials.sh" &&
+   sbt publish
+env:
+  global:
+    - secure: "KQhrxOdmBhix2BIxnGBvXegk6GB7W2pw6QHgTXFRfz6AKudxW4YAKwscDb5704b9GNNZ16BELNmbCeWjKrNFPEgExDWFjJelVpe2Ph3RYUvu6RclDIoMDHKc3Io0HKZCsVuyETx/yq4CTWHsDBux5Dr3e6H5POOM++7YMlg3TTxdv+JYD85UTMr9B/AhjPkF20TOfE9AnToQWwR+oVP9cU4xfcNDZ22D2pHBTNavGRTqt3VBL3GQUJTedOJB5XhZZOyO3d6G9JlgRkQlogrFW5nK9SKB9c46zBWl5+S7XCKpte+FtsCLEEFMPY/XYyhkBGlTc/WB1YtUj6T5SgDXxL5hnEwE9u5WvUlzLLkcqK9fDiTKj/xXpLwynjTkjkVwDpZtTTdDY2bgpNdbsq1+Ml5sDf/SRqYirSGGXWyHdkgbgUtDb9tyNSqlCSd4LKfBKmVsqmpD15hM4aG9UiVOjF5oEojhA4SrEUb6ORINcpw8+dybnD828D9518yciGzf5hnNz1jFsjdY0+wGp89Cg8BzkU/nIvHDJbWLugNAinJdWo6I4g0Gr28h45lxgED+DCvn1RSzg0LxIrKdanxcYyri/rttRPsb3icbQk4UmLm3uld+dDn1ZG7kKiOi/mYw6+h6gF//LTXwMlU9T9q3QE3PFN1fchtmqliEqqO3JW4="
+    - secure: "juiknuhN8oIgbqJHY34UIBaaZqZeTDKoPL8ydYg+shy2RP5ER+YZjgmJoZy1fJN/BbUCe5WlHUJmI2mKwvEP0IH4Jhm+w5EQ8JM6CxTJkYrOvygFESAJKQU/p0lSlCevWHam8StxJd8DvePEE9gk0sOw4TwzPv3lcmNyhMr0jfgZPh6GjCl19uhaNgzdwwFxdVSMiXrs7Ox5vbERJy34EIyW4V24sjff2W9vmroctCkd9StxNPSWeKPnMGZew4+iJz6mt0Pq4JnMPo0YMzyMs9pBmb5Lyz56+tEGSKnow4lanoTdV3RBov7T0gpWnq4Lf7JQRaeQv3z8e2ZfwP1L5cA2sby3tBLpayNOfgnn0uw287U2XgN9Fw1eBraxdh7qi6i3ID6cy1c8kpMQN1kqwYSqeN6Z4JX47E0flKEyuJdPrZs3vX/cdFOianYP/RzFPiJ8vvA0soWz4w4FmkZBUK3VsNG0wkR+gZxQEAUqO5SS2sjMb1/ElFT2skaV09eYvaRGPFluIOqF+HpSVlvEpxVH1XHL3bsyoXkD0vDH6Wln7LEEPsyE9DOkq8OXqdfyNmQRzSQwY5ZRw2IBQubIc/ZRP4h9ZDqmGDFsa0ODL/KZjlS4T0auKqo+AdnXoK7xQC1xEAHKFtQUOrk+zxZsj1c1yKB0F4ZNvPxcLunhKC4="
+    - secure: "f4HNmoQLhD8lDAdShZ8iEoeuAJ/1aji+Ez0vrRXZI73I3mAhJzDKO++t+Yn9ywo1BzadKEVq6uo9x+3Eeu0tCFNgw4/JdWxgqGO0AAnsarRDurpnY2QXi0AKqlE7ZF4wxv5c/n1L9VeaV171gC5V8Rgfg68dxbyg8jAl8DtnN5XmqVa0ffS9hc6ZKtM1sgB0P1cX//Vs7tmNk4u2eXj9FzDNiFnALt6xvF7JRXRp+1erke77CxmQ2fVmo/9hAotHNcJOtwQAuD2TuRlzsaine9LK4+32hoBLSK9F+/FHEU68P2YHdS0Y25KD6rRlYCOpsFrNaQpWlZgpUxRXpbcYSZu4TjsQwKd1hkdDgd2WBMgP/mTRgOrcmv1WnUQPusP21/aESiiLryhHnG6SW43XL7II04PWC1yWoL1wycdAhVG/prpV53I49oY0gD8/koR3/XAqK9exedu6cCCfqFAyEjUKkYxxa4DtWIOkDSHrv8GcIGlwc4SKAhoWH3rJajvnjG1xjgiCv5d7XPT1RrweeqIJLnsTT0resskKr9m+T+TEaD9qIWTWMvGHTxCKDhMmyR2xWEQVEcGcnO4XEG8c4e4TP8+Bs/RHLVmNxqw6RV6kLSbD5wLlZWRcdQX2J7Aib1BTmZOSUBElKRx7NHWRM4flU7qflph1u0t8ElqSl1A="
+    - secure: "FEzvq2ZxBNVV4TCmGOCAKNUnJwKdC18/itLtrjk4hPAbwinI/T97aP11rfCIpw5aY31BN4foq8LJm1DXe2E+m0X866AXo1U12X3EURD4HRMYHgIJ0opdYWLsR2MgUCdtlUF5XuCATbgMvNgAT8HMfBtWsrLgiUViAHvjbPUiurJSemehky+0ewy36NnBEvcpsVCX3RArC5YMtxPuepiQrblSYmboAdIiTMwvSU7AaoDbjp/suSPuFY72hL3Y5Jf6zJjYzmabtn0ZR4YExzgAveWEu9knjTRUvdF/q1UxuRgIJ/uHA8YGh+OpigQxxpXKx/w4QmHKz94a6XpP7RPWd68tRc2mtKCwjjeqYLybWD+dnFTapmXSiYTvYQ4guAFkjJ5tEsRgkISmR+RZwTSI85fUpWqzUXtf2IQY3tenwN4tCsTF4zuVXNI7pkIM4ZlG97jaD/d4MtiyUHW82uNZliYs59vtg8fvmIqCYofGa25e9bRqP6MQRMdDmSAY86/PBwgYakgkIvUmJxgjb7jiZWN17D0OkIfEpJMrHv/HX0YShqHLMIrfhbXwEKGm6Nm5MPA1jnbqYJU3ml2K5FWIWE3ReqBlHL9Nv2e+AOqiJPoCJ38zsgkT3Cj7tzxFKqVbeFcS6Kmlq0keI2iic/89md4ZSJx/ElNI7cmlXQ0neLU="
+    - secure: "UNKBTPMECHcSvQKJ7zMayifOHwV6TEKCT0ISoJRvksUGtnGQTqHcTKdBrFhARIDY3NXpUJqOJuK8RNxYqjn4oONpSLVy9XO8jm+lWgNS9+9ewmj9Savh8aVfrChqhi5fo5tRF1Ssw2ocfpE0ejSdTEdeAQtXhM36UOAR8Uxxyek4OmmFT7fIPYwJdyw1SR6HJJNjMoO1XvXZkVgSBaEEpZTs+9M5VB6ZLfYo5hNim8yvMXWPr4xhAsexIWbo3L3tyyKAi4VOWil+FKayqAghmYYmpN9aNkSdwFaQHwEWj4h6c63BWtLHlVm+J+T8fkMbkCtZcnTyEDOhMr2jGi6reBt3IKdYnhUtw1jrKZemZBXujraDchhLERoMcd9OkyNI/V/mSLK4KlqHuWMGw948jwkq8rHBwlJxqz6m9lDlJvx422JiJxt3kLHiszJiEglYGEGW4y+eiDAF2K3PL4Vn/bOMsxPrOlcbRU2Pht+jQrbA3eIyFh87UEGJjtrwA7ibNqKka4QnUsq+tQInrAcTsArqHT8ZZoOkhB3FRoJxNR1na0zLFjzIQb/UaNMDulOuMc8y8GA7dw6QJ06lNiCr5mZC6uPSlVB81E1Fnzyg9QnEaUI4QqVGEWoTUXiNEGHTx9oVFd3CgS5DlRlzkl0daKjHY9hmhvkWe8YHPcL6ORw="
 notifications:
   webhooks:
     urls:
@@ -18,3 +29,8 @@ notifications:
     on_success: change  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: false     # default: false
+before_script:
+  - git remote set-url origin "https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git"
+before_install:
+  - git config --global user.email "${GH_USER_EMAIL}"
+  - git config --global user.name "${GH_USER}"
