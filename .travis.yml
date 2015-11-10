@@ -8,9 +8,16 @@ jdk:
 - oraclejdk8
 script: sbt ++$TRAVIS_SCALA_VERSION clean coverage test scalastyle && sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-bintraykey:
-  secure: fqzmFFy1WuXUp2aHMbU/a3oo9JfVYBcdJtGFxVtfj+Q3UVWjVpCwxa4Asqdd69UASTSxiil8ywR0DMz99v1OykCoXfPdMh8a46ymJmbR2iZCbjqKSgxdEdVlQa8kWvdIssitdUEwloFa081RQaQRKLqBvb7/mzGWPO4qpoz+ALo=
+  - >
+   bash <(curl -s https://codecov.io/bash) &&
+   test "${TRAVIS_PULL_REQUEST}" = 'false' &&
+   test "${TRAVIS_JDK_VERSION}" = 'oraclejdk8' &&
+   sh "$TRAVIS_BUILD_DIR/.travis-ci-bintray-credentials.sh" &&
+   sbt 'set version := version.value + "." + System.getenv("TRAVIS_BUILD_NUMBER")' publish
+env:
+  global:
+    secure: "rMC2kouHP7SjbLqa0Krdl722Yz7bJOUakR88YlhKVj6VWTlLZ+H1qxJX78OWKHx2vRMpM3/WvHDw4uBVNmf6GI8V3nbv+aF4YJWxKRb9RMahTBd7aIA0DRvXG03yMZd7FCrdpOXzh9oPDkyg7A7V1/csSRgdWYhWOxlfoIuR1juKRucC3Z2euSiDzkhNw1gTO8NZODTMA5Z5t4O6QLGlxzjyp39lz57Tre0foOMbJ+d/ClCZWe5Z4XmXErWyrme00yZo1nss3MGGB2RD4yw+qKCu2GmmqOs+TeKf2wAJRUm43zdwzez9aDHFhNGzcV931DQmy7dwgzDNAN1RE2PQC5PnmCZPldKRe12+fdsR5GkDKGalUUrcKB0a3yjC6Z3DQ0FLRU/aXU4+bgeoYPI0UNblcPTKb72YBLG59WjjcoL60eE4L2x8KBT1pJkQ39p+vp+HjaJbHXm4bBEO1V8amqzHpXPncNGPzeXe48ZsT77L/9EVbrx8jC2HjaHNUdmct+Fgsq4jp8xXgqlcf4o5nux781CsF4hvX3dTLdenR9q8mSnk9LXsBr7/iGiVsxNjUtBP1ATW/HVhnNw4pjlMd7QHlQkVEq5y97sENKjCKL04SD6skBlvLbpT8wvE9GmZpM/Bi24kSlmCo7sRJNRjwykwrQWDxqCuOfgu1Zw38MI="
+    secure: "NdzRMykX0+zidIWvCteLWh9ZYwBiP0r8oBfZWe0p0G/7r738UbfxZG0JLoSsS/DdD1EkQbDB3QXSMyl7fwaX8r80YEXlaLLNF9YAD+uLnWG+1/3Oyiiujztgm78Olvzv+ZoN0St+JMJJbGOknQ4y7LlWykWFlF6lFrrvBkeIRhLDUuy9aQWSO2WMa5G7DN2SmTqh8jsKDpM2f6CvPIDMOXhqDLVjksiLm8zuAJtkBEFLBWBWhs60G3otVQ9V6YWGTth6+yuPQ9iUXu+XGNEnnU/wZ7Yozk5C9FLTGjCU6Gif61vOtNB2YiLlfi8AGAYDXGnqOwt1QfDEV/FpkNTWEeaPBwuYHKFo5IBm6ou+5spSTO3xjH+5vNueEsNarezeZZfa63cBfhv5zE2khqNxuObg06mhCxTZJ4ug0HkTvEH2fjg2O1fMDSFSMoYqJB6dl3msfRsNgnBIYEQRWHQQbvIrds4hb15Er6jIOJcayMBuqu9DTWcny25gZKxKNazyEEUjfxM9kG3Dcj8vwkZPEI2TNJKt9H0yoXHAT0CnDBSJllJJtexu2iENoHk8pPanisMfIt9efH+hGzSll0vRTGPPo0uXfNVkuyJB8jLtnn+9Qb5CmnehnKxh/JI6SV7gFGYxhNNPsQl8tf5bJxO+g9wO15MSkEySYtxCHhZAjQ4="
 notifications:
   webhooks:
     urls:
