@@ -3,7 +3,7 @@ import scoverage.ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages
 
 lazy val buildSettings = Seq(
   organization := "com.lookout",
-  version := "0.1.0-SNAPSHOT",
+  version := "0.1.0",
   scalaVersion := "2.11.7",
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
@@ -66,7 +66,7 @@ lazy val publishSettings = Seq(
   ),
   bintrayRepository := "borderpatrol",
   publishMavenStyle := true,
-  bintrayOrganization := Some("lookout")
+  bintrayOrganization := Some("jamescway")
 )
 
 lazy val noPublish = Seq(
