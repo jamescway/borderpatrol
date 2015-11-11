@@ -14,7 +14,7 @@ after_success:
    test "${TRAVIS_JDK_VERSION}" = 'oraclejdk8' &&
    test "${TRAVIS_TAG}" != '' && echo "TRAVIS TAG: ${TRAVIS_TAG}" &&
    sh "$TRAVIS_BUILD_DIR/.travis-ci-bintray-credentials.sh" &&
-   sbt release with-defaults
+   sbt 'release with-defaults'
 env:
   global:
     - secure: "KQhrxOdmBhix2BIxnGBvXegk6GB7W2pw6QHgTXFRfz6AKudxW4YAKwscDb5704b9GNNZ16BELNmbCeWjKrNFPEgExDWFjJelVpe2Ph3RYUvu6RclDIoMDHKc3Io0HKZCsVuyETx/yq4CTWHsDBux5Dr3e6H5POOM++7YMlg3TTxdv+JYD85UTMr9B/AhjPkF20TOfE9AnToQWwR+oVP9cU4xfcNDZ22D2pHBTNavGRTqt3VBL3GQUJTedOJB5XhZZOyO3d6G9JlgRkQlogrFW5nK9SKB9c46zBWl5+S7XCKpte+FtsCLEEFMPY/XYyhkBGlTc/WB1YtUj6T5SgDXxL5hnEwE9u5WvUlzLLkcqK9fDiTKj/xXpLwynjTkjkVwDpZtTTdDY2bgpNdbsq1+Ml5sDf/SRqYirSGGXWyHdkgbgUtDb9tyNSqlCSd4LKfBKmVsqmpD15hM4aG9UiVOjF5oEojhA4SrEUb6ORINcpw8+dybnD828D9518yciGzf5hnNz1jFsjdY0+wGp89Cg8BzkU/nIvHDJbWLugNAinJdWo6I4g0Gr28h45lxgED+DCvn1RSzg0LxIrKdanxcYyri/rttRPsb3icbQk4UmLm3uld+dDn1ZG7kKiOi/mYw6+h6gF//LTXwMlU9T9q3QE3PFN1fchtmqliEqqO3JW4="
