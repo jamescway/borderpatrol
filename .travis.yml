@@ -6,13 +6,13 @@ scala:
 jdk:
 - oraclejdk7
 - oraclejdk8
-script: sbt ++$TRAVIS_SCALA_VERSION clean coverage test scalastyle && sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
+script: sbt help
 after_success:
   - >
-   bash <(curl -s https://codecov.io/bash) &&
-   test "${TRAVIS_PULL_REQUEST}" = 'false' &&
+   git fetch &&
+   git checkout master || git checkout -b master &&
+   git branch --set-upstream-to=origin/master master &&
    test "${TRAVIS_JDK_VERSION}" = 'oraclejdk8' &&
-   test "${TRAVIS_TAG}" != '' && echo "TRAVIS TAG: ${TRAVIS_TAG}" &&
    sh "$TRAVIS_BUILD_DIR/.travis-ci-bintray-credentials.sh" &&
    sbt 'release with-defaults'
 env:
