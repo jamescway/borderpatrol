@@ -31,6 +31,8 @@ notifications:
     on_start: false     # default: false
 before_script:
   - git remote set-url origin "https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git"
+  - git checkout master || git checkout -b master
+  - git reset --hard origin/master
 before_install:
   - git config --global user.email "${GH_USER_EMAIL}"
   - git config --global user.name "${GH_USER}"
